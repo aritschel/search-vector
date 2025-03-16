@@ -51,8 +51,7 @@ POSTGRES_USER,
 POSTGRES_PASSWORD,
 POSTGRES_HOST,
 POSTGRES_PORT,
-HUGGINGFACE_API_TOKEN,
-
+HUGGINGFACE_API_TOKEN
 ```
 Isso garante que a API do Hugging Face seja acessada corretamente.
 
