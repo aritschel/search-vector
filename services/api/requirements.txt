@@ -1,0 +1,11 @@
+torch --index-url https://download.pytorch.org/whl/cpu
+fastapi
+uvicorn[standard]
+psycopg2-binary
+pgvector
+sentence-transformers
+langchain-postgres
+langchain-huggingface
+langchain-community
+requests
+sqlalchemy
