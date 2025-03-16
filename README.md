@@ -77,7 +77,7 @@ Isso iniciará os serviços `api_service` e `ingestion_service`.
 
 **Exemplo de Uso:**
 ```sh
-curl -X GET "http://localhost:8000/search?question=O%20que%20%C3%A9%20a%20Hotmart?" \
+curl -X GET "http://localhost:8000/search?question=pergunta?" \
      -H "Content-Type: application/json"
 ```
 
