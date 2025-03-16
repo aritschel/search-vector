@@ -1,1 +1,3 @@
-curl --get --data-urlencode "query=O que é a Hotmart" "http://localhost:8000/search"
+curl -X POST "http://localhost:8001/fetch-web" -H "Content-Type: application/json" -d '{"url": "https://hotmart.com/pt-br/blog/como-funciona-hotmart"}'
+
+curl --get --data-urlencode "question=O que é a Hotmart" "http://localhost:8000/search"

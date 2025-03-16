@@ -1,6 +1,5 @@
 from fastapi import FastAPI, HTTPException
 import requests
-import os
 from services.database.db_manager import DBManager
 from utils.embedding_processor import EmbeddingProcessor
 from utils.text_processor import clean_text, split_text
@@ -12,6 +11,18 @@ embeddings = EmbeddingProcessor()
 
 @app.post("/fetch-web")
 def fetch_and_store_webpage(url: str):
+    """
+    Fetches a webpage, cleans the text, splits it into chunks, and stores the chunks in the database.
+
+    Args:
+        url (str): The URL of the webpage to fetch.
+
+    Returns:
+        dict: A message indicating success or failure.
+
+    Raises:
+        HTTPException: If there is an error during the fetch or storage process.
+    """
     try:
         response = requests.get(url)
         response.raise_for_status()
