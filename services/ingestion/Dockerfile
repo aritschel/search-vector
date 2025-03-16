@@ -1,10 +1,11 @@
 FROM python:3.9-slim
 
-WORKDIR /app
+WORKDIR /app/services
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY services /app/services
 
-COPY . .
+RUN pip install -r /app/services/ingestion/requirements.txt
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]
+EXPOSE 8001
+
+CMD ["uvicorn", "services.ingestion.ingestion_service:app", "--host", "0.0.0.0", "--port", "8001", "--reload"]

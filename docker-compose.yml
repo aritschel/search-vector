@@ -9,15 +9,17 @@ services:
       - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
-      - ./services/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./services/database/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
       retries: 5
 
-
   ingestion:
-    build: ./services/ingestion
+    build:
+      context: .
+      dockerfile: services/ingestion/Dockerfile
+    working_dir: /app/services
     container_name: ingestion_service
     restart: always
     env_file:
@@ -32,10 +34,13 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    command: uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+      PYTHONPATH: /app
+    command: uvicorn services.ingestion.ingestion_service:app --host 0.0.0.0 --port 8001 --reload
 
   api:
-    build: ./services/api
+    build:
+      context: .
+      dockerfile: services/api/Dockerfile
     container_name: api_service
     restart: always
     depends_on:
@@ -48,7 +53,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-
+      PYTHONPATH: /app
+    command: uvicorn api.search_service:app --host 0.0.0.0 --port 8000 --reload
 
 volumes:
   pg_data:
