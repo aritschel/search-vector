@@ -1,0 +1,1 @@
+curl --get --data-urlencode "query=O que é a Hotmart" "http://localhost:8000/search"

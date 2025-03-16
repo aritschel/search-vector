@@ -46,19 +46,27 @@ def clean_text(html_content):
     return text
 
 
+def split_text(text, chunk_size=300, overlap=50):
+    """Divide o texto em partes menores e com sobreposição"""
+    words = text.split()
+    chunks = []
+    for i in range(0, len(words), chunk_size - overlap):
+        chunks.append(" ".join(words[i : i + chunk_size]))
+    return chunks
+
+
 @app.post("/fetch-web")
-def fetch_and_store_webpage():
+def fetch_and_store_webpage(url):
     try:
-        url = "https://hotmart.com/pt-br/blog/como-funciona-hotmart"
+        # url = "https://hotmart.com/pt-br/blog/como-funciona-hotmart"
         response = requests.get(url)
         if response.status_code != 200:
             raise HTTPException(status_code=500, detail="Erro ao buscar a página")
 
         cleaned_text = clean_text(response.text)
+        text_chunks = split_text(cleaned_text)
 
-        chunks = [cleaned_text[i : i + 500] for i in range(0, len(cleaned_text), 500)]
-
-        for chunk in chunks:
+        for chunk in text_chunks:
             embedding = embedding_function.embed_documents([chunk])[0]
             embedding_str = "[" + ",".join(map(str, embedding)) + "]"
 
